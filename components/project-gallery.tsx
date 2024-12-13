@@ -6,21 +6,43 @@ import {
     ChevronRight, ChevronLeft,
     Maximize2, ArrowRight,
     Timer, Target, Award,
-    Plus
+    Plus, Check
 } from 'lucide-react';
 
-const ProjectGallery = () => {
-    const [selectedCategory, setSelectedCategory] = useState('all');
-    const [activeProject, setActiveProject] = useState(null);
 
-    const categories = [
+
+interface Category {
+    id: string;
+    label: string;
+}
+
+interface Project {
+    id: number;
+    title: string;
+    category: string;
+    image: string;
+    specs: string[];
+    outcomes: string[];
+}
+
+// Define prop types for any motion components if needed
+type MotionDivProps = {
+    children: React.ReactNode;
+    className?: string;
+};
+
+const ProjectGallery: React.FC = () => {
+    const [selectedCategory, setSelectedCategory] = useState<string>('all');
+    const [activeProject, setActiveProject] = useState<Project | null>(null);
+
+    const categories: Category[] = [
         { id: 'all', label: 'All Projects' },
         { id: 'wire-cut', label: 'Wire Cut EDM' },
         { id: 'drilling', label: 'EDM Drilling' },
         { id: 'cnc', label: 'CNC Solutions' }
     ];
 
-    const projects = [
+    const projects: Project[] = [
         {
             id: 1,
             title: "High-Precision Die Components",
@@ -87,9 +109,21 @@ const ProjectGallery = () => {
         }
     ];
 
-    const filteredProjects = selectedCategory === 'all'
+    const filteredProjects: Project[] = selectedCategory === 'all'
         ? projects
-        : projects.filter(project => project.category === selectedCategory);
+        : projects.filter((project: Project) => project.category === selectedCategory);
+
+    const handleCategorySelect = (categoryId: string): void => {
+        setSelectedCategory(categoryId);
+    };
+
+    const handleProjectClick = (project: Project): void => {
+        setActiveProject(project);
+    };
+
+    const handleCloseModal = (): void => {
+        setActiveProject(null);
+    };
 
     return (
         <section className="relative bg-white py-24">

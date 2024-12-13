@@ -4,15 +4,34 @@ import React, { useState, useEffect } from 'react';
 import {
     Menu, X, ChevronDown, Phone, Mail, MapPin,
     Gauge, Wrench, Cpu, Hammer, MessageSquare,
-    Clock, ArrowRight, ShieldCheck
+    Clock, ArrowRight, ShieldCheck, LucideIcon
 } from 'lucide-react';
 
-const Navbar = () => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [isScrolled, setIsScrolled] = useState(false);
-    const [activeDropdown, setActiveDropdown] = useState(null);
+interface DropdownItem {
+    title: string;
+    description: string;
+    icon: LucideIcon;
+    badge?: string;
+}
 
-    const navItems = [
+interface NavItem {
+    name: string;
+    icon: LucideIcon;
+    dropdownContent: DropdownItem[];
+}
+
+interface ContactInfo {
+    icon: LucideIcon;
+    text: string;
+    href: string;
+}
+
+const Navbar: React.FC = () => {
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [isScrolled, setIsScrolled] = useState<boolean>(false);
+    const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+
+    const navItems: NavItem[] = [
         {
             name: 'Products',
             icon: Hammer,
@@ -59,21 +78,22 @@ const Navbar = () => {
         }
     ];
 
-    const contactInfo = [
+    const contactInfo: ContactInfo[] = [
         { icon: Phone, text: '+1 234 567 890', href: 'tel:+1234567890' },
         { icon: Mail, text: 'info@excon.com', href: 'mailto:info@excon.com' },
         { icon: MapPin, text: 'Peenya 1st Stage, Bangalore', href: '#location' }
     ];
 
     useEffect(() => {
-        const handleScroll = () => {
+        const handleScroll = (): void => {
             setIsScrolled(window.scrollY > 20);
         };
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    const handleDropdownClick = (itemName) => {
+
+    const handleDropdownClick = (itemName: string): void => {
         setActiveDropdown(activeDropdown === itemName ? null : itemName);
     };
 
